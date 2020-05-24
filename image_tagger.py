@@ -14,6 +14,9 @@ import pyexiv2
 img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF']
 img_types.extend([x.lower() for x in img_types])
 
+# these seem to be the relevant attributes (across programs); hierarchies missing, tho
+attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
+
 # set credentials
 credentials_json_path = "image-tagger-th-756c89d87c82.json"                
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_json_path
@@ -60,8 +63,6 @@ def label_single_image(path):
     metadata = pyexiv2.ImageMetadata(file_name)
     metadata.read()
 
-    # these seem to be the relevant attributes (across programs); hierarchies missing, tho
-    attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
     for attr in attributes:
         try:
             if attr not in metadata.keys():
