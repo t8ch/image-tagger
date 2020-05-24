@@ -8,11 +8,12 @@ from google.cloud.vision import types
 from google.cloud.vision import enums
 
 from PIL import Image
+import pyexiv2
 
-# instead of image_file.read()
 def read_downsized_img(path):
     # resize and export image
     # 307200px sufficient according to GCP docu
+    # used instead of image_file.read()
     target_size = 307200 * 2
     img = Image.open(path)
     width, height = img.size
@@ -29,54 +30,53 @@ def read_downsized_img(path):
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/herfurtht/projects-gitreps/image-tagger/image-tagger-th-756c89d87c82.json"                
 # Instantiates a client 
 client = vision.ImageAnnotatorClient() 
-                                         
-# The name of the image file to annotate
-file_name = os.path.abspath('resources/test.jpg')
 
-# Loads the image into memory
-with io.open(file_name, 'rb') as image_file:
-    # content = image_file.read()
-    content = read_downsized_img(file_name)
+def label_single_image(path):
+    # The name of the image file to annotate
+    file_name = os.path.abspath(path)
 
-image = types.Image(content=content)
+    # Loads the image into memory
+    with io.open(file_name, 'rb') as image_file:
+        # content = image_file.read()
+        content = read_downsized_img(file_name)
 
-# Performs label detection on the image file
-response = client.label_detection(image=image)
-labels = response.label_annotations
+    image = types.Image(content=content)
 
-print('Labels:')
-for label in labels:
-    print(label)
-#    print(label.description)
+    # Performs label detection on the image file
+    response = client.label_detection(image=image)
+    labels = response.label_annotations
 
+    tags = [x.description for x in labels[:5]]
+    tags = [x.replace('&','') for x in tags]
+    tags = [x.replace(' ','_') for x in tags]
+    tags = [x.replace('__','_') for x in tags]
+    print(tags)
 
-import pyexiv2
-tags = [x.description for x in labels[:5]]
-tags = [x.replace('&','') for x in tags]
-tags = [x.replace(' ','_') for x in tags]
-tags = [x.replace('__','_') for x in tags]
+    metadata = pyexiv2.ImageMetadata(file_name)
+    metadata.read()
 
-print(tags)
+    # these seem to be the relevant attributes (across programs); hierarchies missing, tho
+    attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
+    for attr in attributes:
+        try:
+            if attr not in metadata.keys():
+                metadata[attr] = tags
+            else:
+                metadata[attr].value.extend(tags)
+                # remove duplicates
+                metadata[attr].value=list(set(metadata[attr].value))
+        except:
+            print('no!')
+            pass
+    metadata.write()
 
-metadata = pyexiv2.ImageMetadata(file_name)
-metadata.read()
+def label_batch(path_list):
+    for path in path_list:
+        label_single_image(path)
 
-# these seem to be the relevant attributes (across programs); hierarchies missing, tho
-attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
-for attr in attributes:
-    try:
-        if attr not in metadata.keys():
-            metadata[attr] = tags
-        else:
-            metadata[attr].value.extend(tags)
-            # remove duplicates
-            metadata[attr].value=list(set(metadata[attr].value))
-            print(metadata[attr].value)
-    except:
-        print('no!')
-        pass
-metadata.write()
+label_batch(['resources/test.jpg', 'resources/mhplus.jpg'])
 
+#
 # this happens when a tag '1st_level/2nd_level' is set in digikam
 # TagsList                        : 1st_level/2nd_level, 1st_level
 # LastKeywordXMP                  : 1st_level/2nd_level, 1st_level
