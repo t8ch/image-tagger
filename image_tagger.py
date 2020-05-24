@@ -18,7 +18,7 @@ img_types.extend([x.lower() for x in img_types])
 attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
 
 # set credentials
-credentials_json_path = "image-tagger-th-756c89d87c82.json"                
+credentials_json_path = "image-tagger-credentials.json"                
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_json_path
 # Instantiates a client 
 client = vision.ImageAnnotatorClient() 
