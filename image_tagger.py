@@ -14,7 +14,7 @@ import pyexiv2
 img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF']
 img_types.extend([x.lower() for x in img_types])
 
-# these seem to be the relevant attributes (across programs); hierarchies missing, tho
+# these seem to be the relevant attributes (across programs, digikam); hierarchies missing, tho
 attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
 
 # set credentials
