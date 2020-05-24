@@ -10,6 +10,16 @@ from google.cloud.vision import enums
 from PIL import Image
 import pyexiv2
 
+# valid image file types according to GCP
+img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF']
+img_types.extend([x.lower() for x in img_types])
+
+# set credentials
+credentials_json_path = "image-tagger-th-756c89d87c82.json"                
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_json_path
+# Instantiates a client 
+client = vision.ImageAnnotatorClient() 
+
 def read_downsized_img(path):
     # resize and export image
     # 307200px sufficient according to GCP docu
@@ -25,11 +35,6 @@ def read_downsized_img(path):
     img.save(buffer, "JPEG")
     content = buffer.getvalue()
     return content
-
-# set credentials  
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/herfurtht/projects-gitreps/image-tagger/image-tagger-th-756c89d87c82.json"                
-# Instantiates a client 
-client = vision.ImageAnnotatorClient() 
 
 def label_single_image(path):
     # The name of the image file to annotate
@@ -74,7 +79,16 @@ def label_batch(path_list):
     for path in path_list:
         label_single_image(path)
 
-label_batch(['resources/test.jpg', 'resources/mhplus.jpg'])
+def get_all_img_paths(folder):
+    paths = []
+    for dirpath, dirnames, filenames in os.walk("."):
+        for filename in [f for f in filenames if f.endswith(tuple(img_types))]:
+            paths.append(os.path.join(dirpath, filename))
+    return paths
+
+def label_images_in_folder(folder_path):
+    img_paths = get_all_img_paths(folder_path)
+    label_batch(img_paths)
 
 #
 # this happens when a tag '1st_level/2nd_level' is set in digikam
@@ -93,30 +107,31 @@ label_batch(['resources/test.jpg', 'resources/mhplus.jpg'])
 # https://github.com/googleapis/google-cloud-python/issues/5661#issuecomment-406694528
 
 
-# set credentials  
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/herfurtht/projects-gitreps/image-tagger/image-tagger-th-756c89d87c82.json"                
-# Instantiates a client 
-client = vision.ImageAnnotatorClient() 
+# # set credentials  
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/herfurtht/projects-gitreps/image-tagger/image-tagger-th-756c89d87c82.json"                
+# # Instantiates a client 
+# client = vision.ImageAnnotatorClient() 
 
-features = [
-    types.Feature(type=enums.Feature.Type.LABEL_DETECTION)
-]
+# features = [
+#     types.Feature(type=enums.Feature.Type.LABEL_DETECTION)
+# ]
 
-requests = []
-for filename in ['resources/mhplus.jpg', 'resources/test.jpg']:
-    with open(filename, 'rb') as image_file:
-        image = types.Image(
-            content = image_file.read())
-    request = types.AnnotateImageRequest(
-        image=image, features=features)
-    requests.append(request)
+# requests = []
+# for filename in ['resources/mhplus.jpg', 'resources/test.jpg']:
+#     with open(filename, 'rb') as image_file:
+#         image = types.Image(
+#             content = image_file.read())
+#     request = types.AnnotateImageRequest(
+#         image=image, features=features)
+#     requests.append(request)
 
-response = client.batch_annotate_images(requests)
+# response = client.batch_annotate_images(requests)
 
-for annotation_response in response.responses:
-    print(annotation_response)
-#   do_something_with(annotation_response)
+# for annotation_response in response.responses:
+#     print(annotation_response)
 
-
+# TODO: streamlit
+# TODO: pip env
+# TODO: docker?
 # TODO: don't add too similar labels
 # TODO: add keywords at second level

@@ -1,5 +1,6 @@
 image-tagger-th-756c89d87c82.json
 .vscode/settings.json
+__pycache__
 
 resources
 image-tagger-nb.ipynb
