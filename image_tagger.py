@@ -11,7 +11,7 @@ from PIL import Image
 import pyexiv2
 
 # valid image file types according to GCP
-img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF']
+img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF', 'TIF']
 img_types.extend([x.lower() for x in img_types])
 
 # these seem to be the relevant attributes (across programs, digikam); hierarchies missing, tho
@@ -39,6 +39,20 @@ def read_downsized_img(path):
     content = buffer.getvalue()
     return content
 
+def only_new_keywords(new_proposal_tags, old_tags):
+    # reduce new tags to those which don't have a word overlapping with existing tags
+    old_words = []
+    new_tags = []
+    for tag in old_tags:
+        old_words.extend(tag.replace('and', '_').split('_'))
+    # new words in existing tags? 
+    for prop in new_proposal_tags:
+        if any(x in prop for x in old_words):
+            print('rejected b/c of duplication: ', prop)
+        else:
+            new_tags.append(prop)
+    return new_tags
+
 def label_single_image(path):
     # The name of the image file to annotate
     file_name = os.path.abspath(path)
@@ -55,10 +69,10 @@ def label_single_image(path):
     labels = response.label_annotations
 
     tags = [x.description for x in labels[:5]]
-    tags = [x.replace('&','') for x in tags]
+    tags = [x.replace('&','and') for x in tags]
     tags = [x.replace(' ','_') for x in tags]
     tags = [x.replace('__','_') for x in tags]
-    print(tags)
+    print(f"proposed tags for {file_name}: {tags}")
 
     metadata = pyexiv2.ImageMetadata(file_name)
     metadata.read()
@@ -68,11 +82,13 @@ def label_single_image(path):
             if attr not in metadata.keys():
                 metadata[attr] = tags
             else:
+                # remove new tags witrh overlapping words
+                # tags = only_new_keywords(tags, metadata[attr].value)
                 metadata[attr].value.extend(tags)
-                # remove duplicates
+                # remove identical duplicates
                 metadata[attr].value=list(set(metadata[attr].value))
         except:
-            print('no!')
+            print('something failed when trying to assign ', attr)
             pass
     metadata.write()
 
@@ -91,8 +107,10 @@ def label_images_in_folder(folder_path):
     img_paths = get_all_img_paths(folder_path)
     label_batch(img_paths)
 
-#
 # this happens when a tag '1st_level/2nd_level' is set in digikam
+#
+# $ exiftool -a G1 -s test.jpg
+#  _______________________________________
 # TagsList                        : 1st_level/2nd_level, 1st_level
 # LastKeywordXMP                  : 1st_level/2nd_level, 1st_level
 # HierarchicalSubject             : 1st_level|2nd_level, 1st_level
@@ -131,6 +149,10 @@ def label_images_in_folder(folder_path):
 # for annotation_response in response.responses:
 #     print(annotation_response)
 
+# TODO: documentation
+# TODO: dry run
+# TODO: logger
+# TODO: CLI
 # TODO: streamlit
 # TODO: pip env
 # TODO: docker?
