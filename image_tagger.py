@@ -20,9 +20,12 @@ img_types.extend([x.lower() for x in img_types])
 attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
 
 # set logging config
+write_log_file = True
 dt = "{:%Y_%m_%d_%H_%M_%S}".format(datetime.now())
 filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), f'image_tagger_info_{dt}.log')
 logging.basicConfig(filename=filename, filemode='w', level=logging.INFO, format='%(asctime)s - %(message)s')
+if not write_log_file:
+    logging.getLogger().removeHandler(logging.getLogger().handlers[0])
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 # add the handler to the root logger
@@ -30,6 +33,7 @@ logging.getLogger('').addHandler(console)
 logging.info('an info')
 # close loggers
 logging.getLogger().handlers.clear()
+
 
 # set credentials
 credentials_json_path = "image-tagger-credentials.json"                
