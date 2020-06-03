@@ -1,7 +1,9 @@
 # https://cloud.google.com/vision/docs/quickstart-client-libraries#before-you-begin
 
 import io 
-import os 
+import os
+import logging
+from datetime import datetime
 # Imports the Google Cloud client library 
 from google.cloud import vision 
 from google.cloud.vision import types 
@@ -11,11 +13,23 @@ from PIL import Image
 import pyexiv2
 
 # valid image file types according to GCP
-img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF', 'TIF']
+img_types=['JPEG','JPG','PNG','GIF','BMP','WEBP','RAW','ICO','PDF','TIFF','TIF']
 img_types.extend([x.lower() for x in img_types])
 
 # these seem to be the relevant attributes (across programs, digikam); hierarchies missing, tho
 attributes = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']
+
+# set logging config
+dt = "{:%Y_%m_%d_%H_%M_%S}".format(datetime.now())
+filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), f'image_tagger_info_{dt}.log')
+logging.basicConfig(filename=filename, filemode='w', level=logging.INFO, format='%(asctime)s - %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# add the handler to the root logger
+logging.getLogger('').addHandler(console)
+logging.info('an info')
+# close loggers
+logging.getLogger().handlers.clear()
 
 # set credentials
 credentials_json_path = "image-tagger-credentials.json"                
@@ -150,11 +164,11 @@ def label_images_in_folder(folder_path):
 #     print(annotation_response)
 
 # TODO: documentation
-# TODO: dry run
+# TODO: dry run/ class
 # TODO: logger
 # TODO: CLI
 # TODO: streamlit
 # TODO: pip env
 # TODO: docker?
-# TODO: don't add too similar labels
+# TODO: don't add too similar labels (find good distance measure)
 # TODO: add keywords at second level
