@@ -4,7 +4,7 @@ Using the GCP vision API for labeling (local) images and writing as tags to meta
 
 ## instructions
 - If not done, set up google cloud platform account and vision API and download crendtials (https://cloud.google.com/vision/docs/quickstart-client-libraries#before-you-begin)
-- Set up python environment; via `pip`: run `pip install -r pip-env.txt` (in your loc env.)
+- Set up (local) python environment: `pip install -r pip-env.txt`
 - from `image-tagger.py` run `tag_images()`:
 ```
 tag_images(folder_path, credentials_path='image-tagger-credentials.json', write_log_file=True, dry_run=False)
