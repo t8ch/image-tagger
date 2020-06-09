@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module image_tagger</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>image_tagger</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/herfurtht/projects-gitreps/image-tagger/image_tagger.py">/home/herfurtht/projects-gitreps/image-tagger/image_tagger.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;https://cloud.google.com/vision/docs/quickstart-client-libraries#before-you-begin</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="PIL.Image.html">PIL.Image</a><br>
+<a href="google.cloud.vision_v1.gapic.enums.html">google.cloud.vision_v1.gapic.enums</a><br>
+</td><td width="25%" valign=top><a href="io.html">io</a><br>
+<a href="logging.html">logging</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="pyexiv2.html">pyexiv2</a><br>
+</td><td width="25%" valign=top><a href="google.cloud.vision_v1.types.html">google.cloud.vision_v1.types</a><br>
+<a href="google.cloud.vision.html">google.cloud.vision</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="image_tagger.html#image_tagger">image_tagger</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="image_tagger">class <strong>image_tagger</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#image_tagger">image_tagger</a>(credentials_path='image-tagger-credentials.json')<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;contains&nbsp;the&nbsp;methods&nbsp;to&nbsp;initialize&nbsp;and&nbsp;run&nbsp;the&nbsp;image&nbsp;tagger<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="image_tagger-__init__"><strong>__init__</strong></a>(self, credentials_path='image-tagger-credentials.json')</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="image_tagger-label_batch"><strong>label_batch</strong></a>(self, path_list)</dt></dl>
+
+<dl><dt><a name="image_tagger-label_images_in_folder"><strong>label_images_in_folder</strong></a>(self, folder_path, write_log_file=True, dry_run=False)</dt></dl>
+
+<dl><dt><a name="image_tagger-label_single_image"><strong>label_single_image</strong></a>(self, path)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-get_all_img_paths"><strong>get_all_img_paths</strong></a>(folder)</dt></dl>
+ <dl><dt><a name="-only_new_keywords"><strong>only_new_keywords</strong></a>(new_proposal_tags, old_tags)</dt></dl>
+ <dl><dt><a name="-read_downsized_img"><strong>read_downsized_img</strong></a>(path)</dt></dl>
+ <dl><dt><a name="-tag_images"><strong>tag_images</strong></a>(folder_path, credentials_path='image-tagger-credentials.json', write_log_file=True, dry_run=False)</dt><dd><tt>This&nbsp;function&nbsp;retrieves&nbsp;the&nbsp;label&nbsp;annotations&nbsp;of&nbsp;all&nbsp;images&nbsp;in&nbsp;the&nbsp;folder&nbsp;from&nbsp;the&nbsp;GCP&nbsp;vision&nbsp;API.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Labels&nbsp;can&nbsp;be&nbsp;written&nbsp;to&nbsp;metadata&nbsp;of&nbsp;the&nbsp;image&nbsp;files.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;folder_path&nbsp;{path}&nbsp;--&nbsp;Folder&nbsp;that&nbsp;contains&nbsp;relevant&nbsp;images.&nbsp;The&nbsp;folder&nbsp;is&nbsp;processed&nbsp;recursively&nbsp;through&nbsp;all&nbsp;levels.<br>
+&nbsp;<br>
+Keyword&nbsp;Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;credentials_path&nbsp;{path}&nbsp;--&nbsp;&nbsp;(local)&nbsp;path&nbsp;of&nbsp;the&nbsp;json&nbsp;file&nbsp;with&nbsp;the&nbsp;credentials&nbsp;for&nbsp;the&nbsp;vision&nbsp;api&nbsp;instance&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(see&nbsp;https://cloud.google.com/vision/docs/quickstart-client-libraries#before-you-begin).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;write_log_file&nbsp;{bool}&nbsp;--&nbsp;Whether&nbsp;to&nbsp;create&nbsp;a&nbsp;log&nbsp;file&nbsp;of&nbsp;the&nbsp;run.&nbsp;(default:&nbsp;{True})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dry_run&nbsp;{bool}&nbsp;--&nbsp;Whether&nbsp;to&nbsp;"dry&nbsp;run",&nbsp;i.e.&nbsp;should&nbsp;the&nbsp;labels&nbsp;be&nbsp;written&nbsp;to&nbsp;the&nbsp;metadata.&nbsp;Labels&nbsp;are&nbsp;written&nbsp;if&nbsp;False.&nbsp;(default:&nbsp;{False})<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#image_tagger">image_tagger</a>&nbsp;<a href="builtins.html#object">object</a>&nbsp;--&nbsp;Can&nbsp;be&nbsp;used&nbsp;for&nbsp;running&nbsp;further&nbsp;labelings&nbsp;with&nbsp;the&nbsp;same&nbsp;instance.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>attributes</strong> = ['Xmp.dc.subject', 'Xmp.digiKam.TagsList', 'Iptc.Application2.Keywords']<br>
+<strong>credentials_json_path</strong> = 'image-tagger-credentials.json'<br>
+<strong>img_types</strong> = ['JPEG', 'JPG', 'PNG', 'GIF', 'BMP', 'WEBP', 'RAW', 'ICO', 'PDF', 'TIFF', 'TIF', 'jpeg', 'jpg', 'png', 'gif', 'bmp', 'webp', 'raw', 'ico', 'pdf', ...]</td></tr></table>
+</body></html>
